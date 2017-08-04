@@ -18,7 +18,6 @@ app.get('/:SeriesInstanceUID', function(req, res) {
 	retriever(req.params.SeriesInstanceUID, APIKey, function() {
 		res.sendFile(path.join(__dirname, 'papaya', 'index.html'));
 	});
-
 })
 
 app.listen(port); // Gives a location for the browser to send requests
