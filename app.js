@@ -20,7 +20,9 @@ app.get('/:SeriesInstanceUID', function(req, res) {
 	});
 })
 
+// Non-lambda local server - Comment out when using lambda //
 // app.listen(port); // Gives a location for the browser to send requests
 // console.log(`Running at port ${port}`);
 
+// Lambda export for lambda handler - Comment out when run locally //
 module.exports = app;
