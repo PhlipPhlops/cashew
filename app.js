@@ -20,7 +20,7 @@ app.get('/:SeriesInstanceUID', function(req, res) {
 	});
 })
 
-app.listen(port); // Gives a location for the browser to send requests
-console.log(`Running at port ${port}`);
+// app.listen(port); // Gives a location for the browser to send requests
+// console.log(`Running at port ${port}`);
 
-//module.exports = app;
+module.exports = app;
