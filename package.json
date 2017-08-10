@@ -6,16 +6,9 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
     "dotenv": "^4.0.0",
-    "express": "~4.15.2",
-    "jade": "~1.11.0",
-    "morgan": "~1.8.1",
-    "node-minizip": "0.2.0",
-    "onezip": "^1.0.8",
+    "express": "^4.15.4",
     "request": "^2.81.0",
-    "serve-favicon": "~2.4.2"
+    "unzip-stream": "^0.1.2"
   }
 }

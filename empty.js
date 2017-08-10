@@ -1,10 +1,7 @@
 // Takes a folder as an input and recursively deletes its contents
 var fs = require('fs');
 
-function empty(dirPath, removeBaseDir) {
-	if (removeBaseDir === undefined) {
-		removeBaseDir = false;
-	}
+function empty(dirPath) {
 	try { 
 		var files = fs.readdirSync(dirPath);
 	} catch(e) {
@@ -19,9 +16,6 @@ function empty(dirPath, removeBaseDir) {
 				empty(filePath, true);
 			}
 		}
-	}
-	if (removeBaseDir) {
-		fs.rmdirSync(dirPath);
 	}
 }
 
