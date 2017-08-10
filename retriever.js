@@ -62,6 +62,8 @@ module.exports = function retriever(SeriesInstanceUID, APIKey, callback) {
 		    console.log('Read entry ', entry.name);
 		});
 
+		// ---
+
 		// var extract = onezip.extract(dataDir + '/patientImages.zip', dataDir + '/patientData/');
 		// console.log(dataDir + '/patientImages.zip');
 		// console.log(dataDir + '/patientData');
@@ -86,6 +88,8 @@ module.exports = function retriever(SeriesInstanceUID, APIKey, callback) {
 		// extract.on('end', () => {
 		//     console.log('done');
 		// });
+
+		// ---
 
 		// Minizip.unzip(dataDir + '/patientImages.zip', dataDir + '/patientData', function(err) {
 		//  	if (err) {
