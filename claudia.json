@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "lambda_cashew-executor",
+    "name": "lambda_cashew",
+    "region": "us-east-1"
+  },
+  "api": {
+    "id": "d89yu76tn3"
+  }
+}

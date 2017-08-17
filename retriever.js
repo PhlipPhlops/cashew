@@ -8,12 +8,11 @@ var empty = require('./empty');
 var dive = require('./diver'); // Loads all .dcm files after download
 
 module.exports = function retriever(SeriesInstanceUID, APIKey, callback) {
-	// var dataDir = __dirname + '/papaya/data';
 	if (SeriesInstanceUID == 'favicon.ico') {
 		return;
 	}
-	var dataDir = './papaya/data';
-	empty(dataDir); // Empties /papaya/data/patientData/
+	var dataDir = '/tmp/papaya/data'
+	empty(dataDir); // Empties /tmp/patientData/
 
 	var baseURL = 'http://services.cancerimagingarchive.net/services/v4';
 	var queryURL = baseURL + '/TCIA/query/getImage?SeriesInstanceUID=' + SeriesInstanceUID + '&api_key=' + APIKey;
@@ -23,18 +22,21 @@ module.exports = function retriever(SeriesInstanceUID, APIKey, callback) {
 
 	r.on('response', function(res) {
 		// Downloads .zip as patientImages.zip at ./papaya/data directory
+
+
 		console.log("Grabbed images");
 		res.pipe(fs.createWriteStream(dataDir + '/patientImages.zip'))
 			.on('close', function() {
-				unzip(callback);
+				fs.mkdir(dataDir + '/patientData', function() {
+					unzip(callback);
+				})
 			});
 	});
 
 	function unzip(callback) {
 		// Unzips ./papaya/data/patientImages.zip to ./papaya/data/patientData
-
-		fs.createReadStream('./papaya/data/patientImages.zip')
-			.pipe(unzipper.Extract({ path: './papaya/data/patientData' }))
+		fs.createReadStream(dataDir + '/patientImages.zip')
+			.pipe(unzipper.Extract({ path: dataDir + '/patientData' }))
 			.on('close', function() {
 				dive(callback);
 			});

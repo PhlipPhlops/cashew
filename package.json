@@ -1,14 +1,17 @@
 {
-  "name": "cashew",
+  "name": "lambda_cashew",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "create": "claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1 --timeout 30 --set-env API_KEY=625776fd-b710-4c2e-b7a3-8ee14097aa90",
+    "test": "claudia test-lambda",
+    "deploy": "claudia update --handler lambda.handler --deploy-proxy-api --region us-east-1 --timeout 30 --set-env API_KEY=625776fd-b710-4c2e-b7a3-8ee14097aa90"
   },
   "dependencies": {
     "aws-serverless-express": "^3.0.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
+    "ncp": "^2.0.0",
     "request": "^2.81.0",
     "unzip-stream": "^0.1.2"
   }

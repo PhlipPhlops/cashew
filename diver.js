@@ -5,7 +5,7 @@
 
 var fs = require('fs');
 
-var baseDir = './papaya/data/';
+var baseDir = '/tmp/papaya/data/';
 var dirArray = [];
 var indexArray = [0];
 var levelPointer = 0
@@ -74,7 +74,6 @@ function recursiveStore() {
 	levelPointer--;
 	indexArray.pop();
 	dirArray.pop();
-	// debug();
 }
 
 function outputToString() {
@@ -83,25 +82,20 @@ function outputToString() {
 	var finalString = 'var params = [];\nparams["images"] = [['
 	for (var i = 0; i < outputImageArray.length; i++) {
 		if (i == outputImageArray.length - 1) { // Handles final entry
-			finalString += "'./" + outputImageArray[i].slice(9) + "'";
+			finalString += "'./" + outputImageArray[i].slice(baseDir.length-5) + "'";
 		} else { // Otherwise appends <'./path/to/file'> to final string
-			finalString += "'./" + outputImageArray[i].slice(9) + "',";
+			finalString += "'./" + outputImageArray[i].slice(baseDir.length-5) + "',";
 		}
 	}
 	finalString += ']];'
 	return finalString
 }
 
-function recursiveStoreAsync(callback) {
-	recursiveStore();
-	callback();
-}
-
 module.exports = function dive(callback) {
 	outputImageArray = [];
-	recursiveStore();
 
-	fs.writeFileSync("./papaya/imageLoader.js", outputToString(), callback());
+	recursiveStore(); // Updates outputImageArray with paths
+	fs.writeFileSync("/tmp/papaya/imageLoader.js", outputToString(), callback(outputImageArray));
 
 	console.log("Loaded images");
 }
