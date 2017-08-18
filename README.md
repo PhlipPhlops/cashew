@@ -17,6 +17,8 @@ Now you should be able to upload the function using `npm run create`, and upload
 
 For more information about these scripts and their layout, check out `https://github.com/claudiajs/claudia/blob/master/docs/create.md`.
 
+Logs for the function can be found in the AWS CloudWatch console, under the function name 'lambda_cashew'.
+
 
 ## Usage
 
