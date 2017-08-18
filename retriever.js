@@ -12,7 +12,9 @@ module.exports = function retriever(SeriesInstanceUID, APIKey, callback) {
 		return;
 	}
 	var dataDir = '/tmp/papaya/data'
-	empty(dataDir); // Empties /tmp/patientData/
+	// empty(dataDir, function() {
+	// 	console.log("Empty dataDir")
+	// }); // Empties /tmp/patientData/
 
 	var baseURL = 'http://services.cancerimagingarchive.net/services/v4';
 	var queryURL = baseURL + '/TCIA/query/getImage?SeriesInstanceUID=' + SeriesInstanceUID + '&api_key=' + APIKey;
@@ -22,7 +24,6 @@ module.exports = function retriever(SeriesInstanceUID, APIKey, callback) {
 
 	r.on('response', function(res) {
 		// Downloads .zip as patientImages.zip at ./papaya/data directory
-
 
 		console.log("Grabbed images");
 		res.pipe(fs.createWriteStream(dataDir + '/patientImages.zip'))

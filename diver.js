@@ -82,9 +82,9 @@ function outputToString() {
 	var finalString = 'var params = [];\nparams["images"] = [['
 	for (var i = 0; i < outputImageArray.length; i++) {
 		if (i == outputImageArray.length - 1) { // Handles final entry
-			finalString += "'./" + outputImageArray[i].slice(baseDir.length-5) + "'";
+			finalString += "'" + outputImageArray[i].slice(baseDir.length-5) + "'";
 		} else { // Otherwise appends <'./path/to/file'> to final string
-			finalString += "'./" + outputImageArray[i].slice(baseDir.length-5) + "',";
+			finalString += "'" + outputImageArray[i].slice(baseDir.length-5) + "',";
 		}
 	}
 	finalString += ']];'
@@ -95,7 +95,7 @@ module.exports = function dive(callback) {
 	outputImageArray = [];
 
 	recursiveStore(); // Updates outputImageArray with paths
-	fs.writeFileSync("/tmp/papaya/imageLoader.js", outputToString(), callback(outputImageArray));
+	fs.writeFileSync("/tmp/papaya/imageLoader.js", outputToString(), callback());
 
 	console.log("Loaded images");
 }

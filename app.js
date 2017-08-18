@@ -8,46 +8,34 @@ var path = require('path');
 var fs = require('fs');
 var ncp = require('ncp').ncp;
 var retriever = require('./retriever.js');
+var empty = require('./empty.js');
 var port = process.env.PORT || 3000;
 
 // API Input
 var APIKey = process.env.API_KEY;
 
-ncp (__dirname + '/papaya', '/tmp/papaya', function (err) {
-	if (err) {
-		console.log(err);
-	}
-	fs.mkdir('/tmp/papaya/data', function() {
-		fs.mkdir('/tmp/papaya/data/patientData', function() {
-			console.log('Made directories');
+empty('/tmp', function() {
+	ncp (__dirname + '/papaya', '/tmp/papaya', function (err) {
+		if (err) {
+			console.log(err);
+		}
+		fs.mkdir('/tmp/papaya/data', function() {
+			fs.mkdir('/tmp/papaya/data/patientData', function() {
+				console.log('Made directories');
+			});
 		});
 	});
 });
 
 app.use(express.static('/tmp/papaya'));
 
-// app.use(express.static(__dirname + '/papaya')); //Serves files inside /papaya
-
-// app.get('/:SeriesInstanceUID', function(req, res) {
-// 	console.log("SeriesInstanceUID=" + req.params.SeriesInstanceUID);
-// 	retriever(req.params.SeriesInstanceUID, APIKey, function() {
-// 		// res.sendFile(path.join(__dirname, 'papaya', 'index.html'));
-// 		// fs.readFile('/tmp/papaya/imageLoader.js', function(err, data) {
-// 		// 	res.send(data);
-// 		// })
-// 		res.send(fs.readdirSync('/tmp'))
-// 	});
-// })
-
 app.get('/:SeriesInstanceUID', function(req, res) {
-	console.log("SeriesInstanceUID=" + req.params.SeriesInstanceUID);
-		retriever(req.params.SeriesInstanceUID, APIKey, function() {
-			res.sendFile('/tmp/papaya/index.html');
-			// fs.readFile('/tmp/papaya/imageLoader.js', function(err, data) {
-			// 	res.send(data);
-			// })
-			// res.send(fs.readdirSync('/tmp/papaya/data/patientData'))
-		});
+	retriever(req.params.SeriesInstanceUID, APIKey, function() {
+
+		console.log(fs.readdirSync('/tmp/papaya/data/patientData'));
+		
+		res.sendFile('/tmp/papaya/index.html');
+	});
 })
 
 app.get('/', function(req, res) {
