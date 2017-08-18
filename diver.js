@@ -13,13 +13,13 @@ var outputImageArray = [];
 
 
 function getDir(level) {
-	// Returns a string path to the directory, or path at <level> levels deep
+	// Returns a path to the specified directory, or a path to a directory at <level> levels deep
 	var dirString = baseDir;
-	if (typeof level != 'number') {
+	if (typeof level != 'number') { // If left undefined, sets the depth level to the current pointer value
 		level = levelPointer;
 	}
 	for (var i = 0; i < level; i++) {
-		dirString += dirArray[i][indexArray[i]] + "/";
+		dirString += dirArray[i][indexArray[i]] + "/"; // Concatinates directory names into a string
 	}
 	return dirString;
 }
@@ -78,16 +78,17 @@ function recursiveStore() {
 
 function outputToString() {
 	// Takes the outputImageArray and turns it into a papaya readable 
-	// string, writes the short imageloader script to file
+	// string, writes the short imageloader script to file called imageLoader.js
 	var finalString = 'var params = [];\nparams["images"] = [['
 	for (var i = 0; i < outputImageArray.length; i++) {
 		if (i == outputImageArray.length - 1) { // Handles final entry
-			finalString += "'" + outputImageArray[i].slice(baseDir.length-5) + "'";
+			finalString += "'" + outputImageArray[i] + "'";
 		} else { // Otherwise appends <'./path/to/file'> to final string
-			finalString += "'" + outputImageArray[i].slice(baseDir.length-5) + "',";
+			finalString += "'" + outputImageArray[i] + "',";
 		}
 	}
 	finalString += ']];'
+	console.log(finalString);
 	return finalString
 }
 
@@ -95,6 +96,7 @@ module.exports = function dive(callback) {
 	outputImageArray = [];
 
 	recursiveStore(); // Updates outputImageArray with paths
+
 	fs.writeFileSync("/tmp/papaya/imageLoader.js", outputToString(), callback());
 
 	console.log("Loaded images");

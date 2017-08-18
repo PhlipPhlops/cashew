@@ -4,55 +4,37 @@ process.chdir(__dirname);
 require('dotenv').config();
 var express = require('express');
 var app = express();
-var path = require('path');
 var fs = require('fs');
 var ncp = require('ncp').ncp;
 var retriever = require('./retriever.js');
 var empty = require('./empty.js');
-var port = process.env.PORT || 3000;
 
 // API Input
-var APIKey = process.env.API_KEY;
-
-empty('/tmp', function() {
-	ncp (__dirname + '/papaya', '/tmp/papaya', function (err) {
-		if (err) {
-			console.log(err);
-		}
-		fs.mkdir('/tmp/papaya/data', function() {
-			fs.mkdir('/tmp/papaya/data/patientData', function() {
-				console.log('Made directories');
-			});
-		});
-	});
-});
+var APIKey = process.env.API_KEY; // Ensure the .env variable API_KEY is updated with the lambda funciton
 
 app.use(express.static('/tmp/papaya'));
 
-app.get('/:SeriesInstanceUID', function(req, res) {
-	retriever(req.params.SeriesInstanceUID, APIKey, function() {
+app.get('/:SeriesInstanceUID', function(req, res) { // Triggered on SeriesInstanceUID input
+	empty('/tmp/papaya', true, function() { // Ensures /tmp/papaya is deleted from the lambda file system
+		ncp (__dirname + '/papaya', '/tmp/papaya', function (err) { // Copies the raw papaya files to the /tmp directory
+			if (err) console.log(err);
 
-		console.log(fs.readdirSync('/tmp/papaya/data/patientData'));
-		
-		res.sendFile('/tmp/papaya/index.html');
+			fs.mkdir('/tmp/papaya/data', function() { // Creates the destination directories for the incoming files
+				console.log('Created data directory');
+
+				retriever(req.params.SeriesInstanceUID, APIKey, function() { // Loads the files in /tmp/papaya/data/patientData to papaya
+						
+					res.sendFile('/tmp/papaya/index.html'); // Serves papaya's index.html
+
+				});
+			});
+		});
 	});
 })
 
 app.get('/', function(req, res) {
-	// Testcase
-	var SeriesInstanceUID = '1.3.6.1.4.1.14519.5.2.1.2783.4001.810950538899398819772032910724'
-	console.log("SeriesInstanceUID=" + SeriesInstanceUID);
-	retriever(SeriesInstanceUID, APIKey, function() {
-		// res.sendFile(path.join(__dirname, 'papaya', 'index.html'));
-		fs.readFile('/tmp/papaya/imageLoader.js', function(err, data) {
-			res.send(data);
-		})
-	});
+	res.send('The root path is currently unhandled. Please append a SeriesInstanceUID to the URL');
 })
 
-// Non-lambda local server - Comment out when using lambda //
-// app.listen(port); // Gives a location for the browser to send requests
-// console.log(`Running at port ${port}`);
-
-// Lambda export for lambda handler - Comment out when run locally //
+// Lambda export for lambda handler
 module.exports = app;

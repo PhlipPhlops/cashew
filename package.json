@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "create": "claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1 --timeout 30 --set-env API_KEY=625776fd-b710-4c2e-b7a3-8ee14097aa90",
+    "create": "claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1 --timeout 30",
     "test": "claudia test-lambda",
-    "deploy": "claudia update --handler lambda.handler --deploy-proxy-api --region us-east-1 --timeout 30 --set-env API_KEY=625776fd-b710-4c2e-b7a3-8ee14097aa90"
+    "deploy": "claudia update --handler lambda.handler --deploy-proxy-api --region us-east-1 --timeout 30"
   },
   "dependencies": {
     "aws-serverless-express": "^3.0.2",
